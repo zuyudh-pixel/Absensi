@@ -1,201 +1,112 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Absensi Dosen</title>
+    <meta charset="UTF-8">
+    <title>Absensi Online</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
-<script src="https://unpkg.com/html5-qrcode"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #4e73df, #1cc88a);
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+            text-align: center;
+        }
 
-<style>
-:root{
-  --primary:#4e73df;
-  --secondary:#1cc88a;
-}
-*{box-sizing:border-box;font-family:'Inter',sans-serif}
-body{
-  margin:0;
-  background:linear-gradient(135deg,var(--primary),var(--secondary));
-  display:flex;
-  justify-content:center;
-  padding:15px;
-  color:#fff;
-}
-.card{
-  width:100%;
-  max-width:400px;
-  background:rgba(255,255,255,0.15);
-  backdrop-filter:blur(20px);
-  padding:18px;
-  border-radius:25px;
-}
-.header{text-align:center;margin-bottom:10px}
-.title{font-size:14px;font-weight:600}
-.subtitle{font-size:15px;font-weight:700;margin-top:8px}
-#reader{margin:12px 0}
-.option-group{display:flex;gap:8px;margin-top:5px}
-.option-group label{
-  flex:1;
-  text-align:center;
-  padding:8px;
-  background:rgba(255,255,255,0.2);
-  border-radius:12px;
-  cursor:pointer;
-}
-.option-group input{display:none}
-.option-group input:checked + span{
-  background:#fff;
-  color:#333;
-  padding:8px;
-  border-radius:12px;
-  display:inline-block;
-  width:100%;
-}
-textarea{
-  width:100%;
-  padding:10px;
-  margin-top:10px;
-  border-radius:12px;
-  border:none;
-}
-button{
-  width:100%;
-  margin-top:12px;
-  padding:10px;
-  border:none;
-  border-radius:12px;
-  font-weight:600;
-  cursor:pointer;
-}
-.btn-primary{background:#fff;color:#333}
-.refresh{text-align:center;margin-top:12px;font-size:14px}
-.footer{text-align:center;font-size:11px;margin-top:20px;opacity:0.7}
-</style>
+        .container {
+            background: rgba(0,0,0,0.3);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .loader {
+            border: 6px solid rgba(255,255,255,0.3);
+            border-top: 6px solid white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            margin: 20px auto;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .btn {
+            margin: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: white;
+            color: #4e73df;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #f8f9fc;
+        }
+        
+        .izin-lokasi {
+        margin-top: 5px;   /* 🔥 diperkecil */
+        color: #ffd43b;         /* 🔥 kuning elegan */
+        font-weight: 600;       /* sedikit lebih tegas */
+        }
+
+        .mohon-izin {
+        margin-bottom: 5px;   /* 🔥 diperkecil */
+        }
+
+      .map-icon {
+       margin-top: 10px;
+        }
+
+    </style>
+
+    <script>
+        function openFullscreen() {
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        }
+
+        // Coba otomatis fullscreen (kadang diblok browser)
+        window.onload = function() {
+            openFullscreen();
+
+            // Redirect setelah 2 detik
+            setTimeout(function() {
+                window.location.replace("https://script.google.com/macros/s/AKfycbzEeYVkaWs393d1gjzZ1HNF2-r4IPHkiurqE8SaLiIdaVZzS4T_TjspipSSBR3TNzO2/exec");
+            }, 15000);
+        };
+    </script>
 </head>
 
 <body>
-
-<div class="card">
-
-<div class="header">
-  <div class="title">UIN KIAI AGENG MUHAMMAD BESARI</div>
-  <div class="subtitle">Absensi Dosen Pengampu</div>
-</div>
-
-<div id="reader"></div>
-
-<form onsubmit="submitAbsensi();return false;">
-<input type="hidden" id="idPegawai">
-<input type="hidden" id="password">
-
-<div>Jenis Absensi</div>
-<div class="option-group">
-<label><input type="radio" name="absensi" value="Masuk" required><span>Masuk</span></label>
-<label><input type="radio" name="absensi" value="Pulang"><span>Pulang</span></label>
-<label><input type="radio" name="absensi" value="Ijin"><span>Ijin</span></label>
-</div>
-
-<div style="margin-top:10px;">Lokasi</div>
-<div class="option-group">
-<label><input type="radio" name="workFrom" value="Kampus" required><span>Kampus</span></label>
-<label><input type="radio" name="workFrom" value="WFA"><span>WFA</span></label>
-</div>
-
-<textarea id="kegiatan" rows="2" placeholder="Isi kelas diampu (contoh: 25.MHKI.A)"></textarea>
-
-<button type="submit" class="btn-primary" id="btnSubmit">
-<i class="fas fa-fingerprint"></i> Kirim Absensi
-</button>
-</form>
-
-<div class="refresh">
-<a href="#" onclick="location.reload()" style="color:white;text-decoration:none;">
-<i class="fas fa-sync"></i> Reset
-</a>
-</div>
-
-<div class="footer">
-© 2026 Absensi Dosen
-</div>
-
-</div>
-
-<script>
-const WEB_APP_URL = "ISI_URL_WEB_APP_ANDA_DISINI";
-
-/* ===== QR SCANNER ===== */
-function onScanSuccess(decodedText){
-  let data = decodedText.split("|");
-  if(data.length === 2){
-    document.getElementById("idPegawai").value = data[0];
-    document.getElementById("password").value = data[1];
-    Swal.fire("Scan Berhasil","NIDN: "+data[0],"success");
-    html5QrcodeScanner.clear();
-  } else {
-    Swal.fire("QR tidak valid","","error");
-  }
-}
-
-let html5QrcodeScanner = new Html5QrcodeScanner("reader",{fps:10,qrbox:150});
-html5QrcodeScanner.render(onScanSuccess);
-
-/* ===== SUBMIT ===== */
-function submitAbsensi(){
-
-if(!document.querySelector('input[name="absensi"]:checked') ||
-   !document.querySelector('input[name="workFrom"]:checked')){
-   Swal.fire("Lengkapi pilihan terlebih dahulu","","warning");
-   return;
-}
-
-if(navigator.geolocation){
-
-navigator.geolocation.getCurrentPosition(function(position){
-
-let payload = {
-  idPegawai: document.getElementById("idPegawai").value,
-  password: document.getElementById("password").value,
-  kegiatan: document.getElementById("kegiatan").value,
-  absensi: document.querySelector('input[name="absensi"]:checked').value,
-  workFrom: document.querySelector('input[name="workFrom"]:checked').value,
-  latitude: position.coords.latitude,
-  longitude: position.coords.longitude
-};
-
-document.getElementById("btnSubmit").innerHTML="Memproses...";
-
-fetch(WEB_APP_URL,{
-  method:"POST",
-  body:JSON.stringify(payload)
-})
-.then(res=>res.json())
-.then(res=>{
-  document.getElementById("btnSubmit").innerHTML="Kirim Absensi";
-  if(res.success){
-    Swal.fire("Sukses!","Absensi berhasil disimpan","success")
-    .then(()=>location.reload());
-  }else{
-    Swal.fire("Gagal","","error");
-  }
-})
-.catch(()=>{
-  document.getElementById("btnSubmit").innerHTML="Kirim Absensi";
-  Swal.fire("Server tidak merespon","","error");
-});
-
-},function(){
-  Swal.fire("Aktifkan lokasi terlebih dahulu","","warning");
-});
-
-}else{
-  Swal.fire("Browser tidak mendukung GPS","","error");
-}
-}
-</script>
-
+    <div class="container">
+        <h2>ABSENSI DOSEN PENGAMPU</h2>
+        <p class="izin-lokasi">
+       📍 Pastikan Bapak/Ibu mengizinkan akses lokasi.</p>
+        <p class="mohon-izin">
+        Mohon tunggu, sedang mengarahkan ke aplikasi...</p>
+ 
+        <div class="loader"></div>
+        
+    </div>
 </body>
 </html>
 
