@@ -55,6 +55,21 @@
         .btn:hover {
             background: #f8f9fc;
         }
+        
+        .izin-lokasi {
+        margin-top: 5px;   /* 🔥 diperkecil */
+        color: #ffd43b;         /* 🔥 kuning elegan */
+        font-weight: 600;       /* sedikit lebih tegas */
+        }
+
+        .mohon-izin {
+        margin-bottom: 5px;   /* 🔥 diperkecil */
+        }
+
+      .map-icon {
+       margin-top: 10px;
+        }
+
     </style>
 
     <script>
@@ -75,16 +90,20 @@
 
             // Redirect setelah 2 detik
             setTimeout(function() {
-                window.location.replace("https://script.google.com/macros/s/AKfycbxUcl-yepVjRz7Ci-WTY5nxba0KerSwL-f7yp0qRCgHnpLcj7IApEev5OGaUZVvd6dh/exec");
-            }, 2000);
+                window.location.replace("https://script.google.com/macros/s/AKfycby40OK-twlZ-hQ06_0lDYMF8k85GamLauWtGdPfDwywiZB294Nj-zn2aK3KQXfUdqhV/exec");
+            }, 15000);
         };
     </script>
 </head>
 
 <body>
     <div class="container">
-        <h2>Absensi Dosen Pengampu</h2>
-        <p>Mohon tunggu, sedang mengarahkan ke aplikasi...</p>
+        <h2>ABSENSI DOSEN PENGAMPU</h2>
+        <p class="mohon-izin">
+        Mohon tunggu, sedang mengarahkan ke aplikasi...</p>
+        <p class="izin-lokasi">
+    📍 Pastikan Bapak/Ibu mengizinkan akses lokasi.
+</p>
         <div class="loader"></div>
         
     </div>
