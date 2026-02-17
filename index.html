@@ -3,274 +3,76 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Absensi Mobile</title>
+<title>Absensi Dosen</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 <script src="https://unpkg.com/html5-qrcode"></script>
-
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#4e73df">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Absensi Dosen">
-<link rel="apple-touch-icon" href="ICON_192.png">
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <style>
-
-:root {
-  --primary: #4e73df;
-  --secondary: #1cc88a;
-  --glass-bg: rgba(255,255,255,0.15);
-  --border: rgba(255,255,255,0.3);
-  --text: #ffffff;
+:root{
+  --primary:#4e73df;
+  --secondary:#1cc88a;
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --glass-bg: rgba(0,0,0,0.35);
-    --border: rgba(255,255,255,0.1);
-    --text: #ffffff;
-  }
+*{box-sizing:border-box;font-family:'Inter',sans-serif}
+body{
+  margin:0;
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  display:flex;
+  justify-content:center;
+  padding:15px;
+  color:#fff;
 }
-
-* {
-  box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
+.card{
+  width:100%;
+  max-width:400px;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(20px);
+  padding:18px;
+  border-radius:25px;
 }
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 15px 10px;
-  color: var(--text);
-  overscroll-behavior: none;
+.header{text-align:center;margin-bottom:10px}
+.title{font-size:14px;font-weight:600}
+.subtitle{font-size:15px;font-weight:700;margin-top:8px}
+#reader{margin:12px 0}
+.option-group{display:flex;gap:8px;margin-top:5px}
+.option-group label{
+  flex:1;
+  text-align:center;
+  padding:8px;
+  background:rgba(255,255,255,0.2);
+  border-radius:12px;
+  cursor:pointer;
 }
-
-
-.card {
-  width: 100%;
-  max-width: 400px;
-  padding: 18px;
-  border-radius: 25px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--border);
-  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-  animation: fadeIn 0.8s ease;
+.option-group input{display:none}
+.option-group input:checked + span{
+  background:#fff;
+  color:#333;
+  padding:8px;
+  border-radius:12px;
+  display:inline-block;
+  width:100%;
 }
-
-@keyframes fadeIn {
-  from { opacity:0; transform: translateY(20px) scale(0.95); }
-  to { opacity:1; transform: translateY(0) scale(1); }
+textarea{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  border-radius:12px;
+  border:none;
 }
-
-.header {
-  text-align: center;
-  margin-bottom: 10px;
+button{
+  width:100%;
+  margin-top:12px;
+  padding:10px;
+  border:none;
+  border-radius:12px;
+  font-weight:600;
+  cursor:pointer;
 }
-
-.logo {
-  width: 50px;
-  margin-bottom: 5px;
-}
-
-.title {
-  font-size: 14px;
-}
-
-.subtitle {
-  font-size: 14px;      /* sedikit diperbesar */
-  font-weight: 700;     /* 🔥 dibuat tebal */
-  margin-top: 12px;      /* 🔥 tambah jarak atas */
-  letter-spacing: 0.4px;
-}
-
-
-#reader {
-  width: 100%;
-  border-radius: 15px;
-  overflow: hidden;
-  margin: 12px 0;
-}
-
-.section {
-  font-size: 14px;
-  margin-top: 8px;
-  margin-bottom: 4px;
-}
-
-
-.option-group {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.option-group label {
-  flex: 1;
-  text-align: center;
-  padding: 10px;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.1);
-  cursor: pointer;
-  font-size: 14px;      /* 🔥 diperbesar */
-  font-weight: 600;     /* 🔥 lebih tegas */
-  transition: 0.3s;
-}
-.option-group label:hover {
-  transform: translateY(-3px);
-  background: rgba(255,255,255,0.25);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-}
-
-.option-group input {
-  display: none;
-}
-
-.option-group input:checked + span {
-  background: white;
-  color: #333;
-  padding: 10px;
-  border-radius: 14px;
-  display: inline-block;
-  width: 100%;
-  font-size: 14px;      /* 🔥 konsisten */
-  font-weight: 600;
-}
-
-textarea {
-  display: block;
-  width: 100%;
-  min-height: 35px;
-  padding: 12px;
-  margin-top: 10px;
-  border-radius: 15px;
-  border: none;
-  outline: none;
-  resize: none;
-  font-size: 13px;
-
-  background: white;
-  color: #333;
-
-  box-sizing: border-box;
-  transition: 0.2s ease;
-}
-
-textarea::placeholder {
-  color: #777;
-  font-size: 12px;
-}
-
-textarea:focus {
-  transform: scale(0.99);
-}
-
-button {
-  transition: all 0.25s ease;
-}
-
-button:hover {
-  transform: translateY(-2px) scale(1.04);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.25);
-}
-
-.refresh a {
-  color: #ffd43b;   /* 🔥 kuning elegan */
-  transition: all 0.25s ease;
-  display: inline-block;
-}
-
-.refresh a:hover {
-  transform: scale(1.08);
-  text-shadow: 0 0 10px rgba(255,255,255,0.6);
-}
-
-button {
-  padding: 10px;
-  margin-top: 10px;
-  font-size: 13px;
-  width: 100%;
-  border-radius: 15px;
-  border: none;
-  background: white;
-  color: #333;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-button:hover {
-  transform: scale(0.98);
-}
-
-.footer {
-  text-align: center;
-  font-size: 10px;
-  margin-top: 42px;
-  opacity: 0.7;
-}
-
-
-.refresh {
-  text-align: center;
-  margin-top: 12px;
-  font-size: 14px;
-}
-
-.refresh a {
-  color: white;
-  text-decoration: none;
-  opacity: 0.95;
-  font-size: 15px;     /* 🔥 diperbesar */
-  font-weight: 700;    /* 🔥 dibuat tebal */
-  letter-spacing: 0.3px;
-}
-
-
-.btn-loading {
-  position: relative;
-  pointer-events: none;
-  opacity: 0.8;
-}
-
-.btn-loading::after {
-  content: "";
-  width: 18px;
-  height: 18px;
-  border: 3px solid #ccc;
-  border-top: 3px solid #333;
-  border-radius: 50%;
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  animation: spin 0.7s linear infinite;
-}
-
-@keyframes spin {
-  100% { transform: translateY(-50%) rotate(360deg); }
-}
-
-/* Perkecil teks "Scan an Image File" */
-#reader__dashboard_section_csr span,
-#reader__dashboard_section_csr button,
-#reader__dashboard_section_csr input {
-  font-size: 11px !important;
-}
-
-/* Jika masih besar, paksa lebih kecil */
-#reader__dashboard_section_csr {
-  font-size: 11px !important;
-}
-
+.btn-primary{background:#fff;color:#333}
+.refresh{text-align:center;margin-top:12px;font-size:14px}
+.footer{text-align:center;font-size:11px;margin-top:20px;opacity:0.7}
 </style>
 </head>
 
@@ -278,197 +80,120 @@ button:hover {
 
 <div class="card">
 
-  <div class="header">
-  <img src="data:image/png;base64, <?!=dt.logo?>" class="logo">
-  <div style="font-size:11px; opacity:0.85; margin-bottom:4px;">
-    UIN KIAI AGENG MUHAMMAD BESARI
-  </div>
-  <div class="title"><?!=dt.perusahaan?></div>
+<div class="header">
+  <div class="title">UIN KIAI AGENG MUHAMMAD BESARI</div>
   <div class="subtitle">Absensi Dosen Pengampu</div>
 </div>
 
+<div id="reader"></div>
 
-  <div id="reader"></div>
+<form onsubmit="submitAbsensi();return false;">
+<input type="hidden" id="idPegawai">
+<input type="hidden" id="password">
 
-  <form onsubmit="submitAbsensi();return false;">
-    <input type="hidden" id="idPegawai">
-    <input type="hidden" id="password">
+<div>Jenis Absensi</div>
+<div class="option-group">
+<label><input type="radio" name="absensi" value="Masuk" required><span>Masuk</span></label>
+<label><input type="radio" name="absensi" value="Pulang"><span>Pulang</span></label>
+<label><input type="radio" name="absensi" value="Ijin"><span>Ijin</span></label>
+</div>
 
-    <div class="section">Jenis Absensi</div>
-    <div class="option-group">
-      <label><input type="radio" name="absensi" value="Masuk" required><span>Masuk</span></label>
-      <label><input type="radio" name="absensi" value="Pulang"><span>Pulang</span></label>
-      <label><input type="radio" name="absensi" value="Ijin"><span>Ijin</span></label>
-    </div>
+<div style="margin-top:10px;">Lokasi</div>
+<div class="option-group">
+<label><input type="radio" name="workFrom" value="Kampus" required><span>Kampus</span></label>
+<label><input type="radio" name="workFrom" value="WFA"><span>WFA</span></label>
+</div>
 
-    <div class="section">Lokasi</div>
-    <div class="option-group">
-      <label><input type="radio" name="workFrom" value="WFO" required><span>Kampus</span></label>
-      <label><input type="radio" name="workFrom" value="WFH"><span>WFA</span></label>
-      <label><input type="radio" name="workFrom" value="Ijin"><span>Ijin</span></label>
-    </div>
+<textarea id="kegiatan" rows="2" placeholder="Isi kelas diampu (contoh: 25.MHKI.A)"></textarea>
 
-<div class="section">Kelas</div>
-    <textarea id="kegiatan" 
-  rows="1" 
-  placeholder="Isi saat pulang kelas diampu, (contoh: 25.MHKI.A)">
-</textarea>
-
-<button type="submit" id="btnSubmit">
-  <i class="fas fa-fingerprint"></i> Kirim Absensi
+<button type="submit" class="btn-primary" id="btnSubmit">
+<i class="fas fa-fingerprint"></i> Kirim Absensi
 </button>
+</form>
 
-  </form>
-
-  <div class="refresh">
-  <a href="#" onclick="resetFormApp()">
-    <i class="fas fa-sync-alt"></i> Absensi Lagi
-  </a>
+<div class="refresh">
+<a href="#" onclick="location.reload()" style="color:white;text-decoration:none;">
+<i class="fas fa-sync"></i> Reset
+</a>
 </div>
 
-
-  <div class="footer">
-    © 2026 <?!=dt.perusahaan?>
-  </div>
-
+<div class="footer">
+© 2026 Absensi Dosen
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.0.18/sweetalert2.all.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</div>
 
 <script>
-function onScanSuccess(decodedText) {
+const WEB_APP_URL = "ISI_URL_WEB_APP_ANDA_DISINI";
+
+/* ===== QR SCANNER ===== */
+function onScanSuccess(decodedText){
   let data = decodedText.split("|");
-  if (data.length === 2) {
-    $("#idPegawai").val(data[0]);
-    $("#password").val(data[1]);
-    Swal.fire({
-      icon: "success",
-      title: "Scan Berhasil",
-      text: "NIDN: " + data[0],
-      timer: 1500,
-      showConfirmButton: false
-    });
+  if(data.length === 2){
+    document.getElementById("idPegawai").value = data[0];
+    document.getElementById("password").value = data[1];
+    Swal.fire("Scan Berhasil","NIDN: "+data[0],"success");
     html5QrcodeScanner.clear();
   } else {
-    Swal.fire("Barcode tidak dikenal", "", "error");
+    Swal.fire("QR tidak valid","","error");
   }
 }
 
-let html5QrcodeScanner = new Html5QrcodeScanner("reader",{
-  fps:10,
-  qrbox:150
-});
+let html5QrcodeScanner = new Html5QrcodeScanner("reader",{fps:10,qrbox:150});
 html5QrcodeScanner.render(onScanSuccess);
 
+/* ===== SUBMIT ===== */
+function submitAbsensi(){
 
+if(!document.querySelector('input[name="absensi"]:checked') ||
+   !document.querySelector('input[name="workFrom"]:checked')){
+   Swal.fire("Lengkapi pilihan terlebih dahulu","","warning");
+   return;
+}
 
-function submitAbsensi() {
+if(navigator.geolocation){
 
-  if (!$('input[name=absensi]:checked').val() ||
-      !$('input[name=workFrom]:checked').val()) {
+navigator.geolocation.getCurrentPosition(function(position){
 
-    Swal.fire("Lengkapi pilihan absensi dan lokasi!", "", "warning");
-    return;
+let payload = {
+  idPegawai: document.getElementById("idPegawai").value,
+  password: document.getElementById("password").value,
+  kegiatan: document.getElementById("kegiatan").value,
+  absensi: document.querySelector('input[name="absensi"]:checked').value,
+  workFrom: document.querySelector('input[name="workFrom"]:checked').value,
+  latitude: position.coords.latitude,
+  longitude: position.coords.longitude
+};
+
+document.getElementById("btnSubmit").innerHTML="Memproses...";
+
+fetch(WEB_APP_URL,{
+  method:"POST",
+  body:JSON.stringify(payload)
+})
+.then(res=>res.json())
+.then(res=>{
+  document.getElementById("btnSubmit").innerHTML="Kirim Absensi";
+  if(res.success){
+    Swal.fire("Sukses!","Absensi berhasil disimpan","success")
+    .then(()=>location.reload());
+  }else{
+    Swal.fire("Gagal","","error");
   }
+})
+.catch(()=>{
+  document.getElementById("btnSubmit").innerHTML="Kirim Absensi";
+  Swal.fire("Server tidak merespon","","error");
+});
 
-   startLoading();
+},function(){
+  Swal.fire("Aktifkan lokasi terlebih dahulu","","warning");
+});
 
-  if (navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(function(position){
-
-      let data = {
-        idPegawai: $('#idPegawai').val(),
-        password: $('#password').val(),
-        kegiatan: $('#kegiatan').val(),
-        absensi: $('input[name=absensi]:checked').val(),
-        workFrom: $('input[name=workFrom]:checked').val(),
-        position: [position.coords.latitude, position.coords.longitude]
-      };
-
-      google.script.run
-        .withSuccessHandler(callbackAbsensi)
-        .withFailureHandler(function(){
-          stopLoading();
-          Swal.fire("Terjadi kesalahan!", "", "error");
-        })
-        .submitAbsensi(data);
-
-    }, function(){
-      stopLoading();
-      Swal.fire("Aktifkan lokasi terlebih dahulu!", "", "warning");
-    });
-
-  } else {
-    stopLoading();
-    Swal.fire("Browser tidak mendukung GPS", "", "error");
-  }
+}else{
+  Swal.fire("Browser tidak mendukung GPS","","error");
 }
-
-
-function startLoading(){
-  $("#btnSubmit").addClass("btn-loading");
-  $("#btnSubmit").html('<i class="fas fa-spinner fa-spin"></i> Memproses...');
 }
-
-function stopLoading(){
-  $("#btnSubmit").removeClass("btn-loading");
-  $("#btnSubmit").html('<i class="fas fa-fingerprint"></i> Kirim Absensi');
-}
-function callbackAbsensi(dt){
-
-  stopLoading(); // ⬅️ WAJIB agar tombol kembali normal
-
-  if (dt.success){
-    Swal.fire({
-      icon: "success",
-      title: "Sukses!",
-      text: "Absensi berhasil disimpan.",
-      timer: 2000,
-      showConfirmButton: false
-    }).then(()=>{
-      resetFormApp(); // optional auto reset setelah sukses
-    });
-
-  } else {
-    Swal.fire("Gagal!", dt.msg, "error");
-  }
-}
-
-
-
-
-
-
-function resetFormApp() {
-
-  // Kosongkan input
-  $("#idPegawai").val("");
-  $("#password").val("");
-  $("#kegiatan").val("");
-
-  // Uncheck radio
-  $("input[type=radio]").prop("checked", false);
-
-  // Hapus alert jika ada
-  $(".alert").hide();
-  
-  // Restart scanner
-  html5QrcodeScanner.clear().then(() => {
-      html5QrcodeScanner.render(onScanSuccess);
-  });
-
-  Swal.fire({
-    icon: "info",
-    title: "Form Direset",
-    text: "Silakan lakukan absensi kembali",
-    timer: 1500,
-    showConfirmButton: false
-  });
-
-}
-
-
 </script>
 
 </body>
