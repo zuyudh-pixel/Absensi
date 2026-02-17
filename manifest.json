@@ -1,0 +1,11 @@
+{
+{
+  "name": "Absensi Dosen Pascasarjana UIN Ponorogo",
+  "short_name": "Absensi",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#4e73df",
+  "theme_color": "#4e73df",
+  "orientation": "portrait"
+}
+
